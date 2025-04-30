@@ -25,3 +25,10 @@ Continuous Learning: AI in fAInance continuously learns from user behavior and t
 Marketing Strategy: fAInance focuses on social media campaigns, influencer partnerships, and gamified referral programs to attract and retain young users while being adaptable for a broader audience.
 Conclusion:
 Our app fAInance is designed to bridge the financial knowledge gap for young adults, providing them with the tools and knowledge needed to make confident financial decisions. By combining advanced AI technology with an engaging user experience, fAInance empowers all users in their financial journey while ensuring security, transparency, and inclusivity.
+
+![WhatsApp Image 2025-02-09 at 11 48 59_d6135947](https://github.com/user-attachments/assets/6c3150c2-7592-41a6-9755-4c9d5c2e6bf3)
+![image](https://github.com/user-attachments/assets/fb8ed43e-a4c2-4598-8b6e-bd0d50d602f1)
+![image](https://github.com/user-attachments/assets/2b216b49-98f7-4cbc-a150-32c36a4227ad)
+
+
+
