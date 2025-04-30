@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Fraud Detection</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --success: #22c55e;
+            --background: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .background-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                var(--primary) 0%,
+                var(--secondary) 25%,
+                transparent 50%
+            );
+            animation: rotate 20s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 100%;
+            margin: auto;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s ease infinite;
+        }
+
+        h3 {
+            color: #fff;
+            margin: 20px 0 10px;
+            font-size: 1.2em;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .input-group {
+            margin: 15px 0;
+            position: relative;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        input[type="file"]:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+            margin: 10px 0;
+            transform: scaleX(-1);
+            display: none;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result h3 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .result p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .result strong {
+            color: var(--primary);
+        }
+
+        /* Loading animation */
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+
+    <div class="container">
+        <h2>Financial Fraud Detection</h2>
+
+        <div class="input-group">
+            <h3><i class="fas fa-file-upload"></i> Upload a Document</h3>
+            <input type="file" id="fileInput">
+        </div>
+
+        <div class="input-group">
+            <h3><i class="fas fa-camera"></i> Capture a Photo</h3>
+            <button id="startCamera"><i class="fas fa-video"></i> Open Camera</button>
+            <video id="video" autoplay></video>
+            <button id="capturePhoto" style="display:none;"><i class="fas fa-camera"></i> Capture Photo</button>
+            <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="input-group">
+            <h3><i class="fas fa-keyboard"></i> Or Enter Text</h3>
+            <textarea id="textInput" placeholder="Type or paste financial text here..."></textarea>
+        </div>
+
+        <button id="analyzeButton"><i class="fas fa-search"></i> Analyze</button>
+
+        <div class="loading" id="loadingIndicator"></div>
+
+        <div class="result" id="resultBox">
+            <h3><i class="fas fa-chart-bar"></i> Analysis Result</h3>
+            <p><strong>Extracted Text:</strong></p>
+            <p id="extractedText"></p>
+            <p><strong>Fraud Prediction:</strong></p>
+            <p id="fraudPrediction"></p>
+        </div>
+    </div>
+
+    <script>
+        let video = document.getElementById("video");
+        let canvas = document.getElementById("canvas");
+        let startCameraBtn = document.getElementById("startCamera");
+        let capturePhotoBtn = document.getElementById("capturePhoto");
+        let analyzeButton = document.getElementById("analyzeButton");
+        let loadingIndicator = document.getElementById("loadingIndicator");
+
+        startCameraBtn.addEventListener("click", async function () {
+            try {
+                let stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                video.style.display = "block";
+                capturePhotoBtn.style.display = "block";
+                startCameraBtn.style.display = "none";
+            } catch (err) {
+                alert("Error accessing camera: " + err.message);
+            }
+        });
+
+        capturePhotoBtn.addEventListener("click", function () {
+            let context = canvas.getContext("2d");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            context.translate(canvas.width, 0);
+            context.scale(-1, 1);
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            video.style.display = "none";
+            capturePhotoBtn.style.display = "none";
+            startCameraBtn.style.display = "block";
+            
+            // Stop the camera stream
+            let stream = video.srcObject;
+            let tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            
+            processCapturedImage();
+        });
+
+        analyzeButton.addEventListener("click", async function () {
+            let fileInput = document.getElementById("fileInput").files[0];
+            let textInput = document.getElementById("textInput").value.trim();
+
+            let formData = new FormData();
+            if (fileInput) {
+                formData.append("file", fileInput);
+            } else if (textInput) {
+                formData.append("text", textInput);
+            } else if (canvas.toDataURL()) {
+                let blob = await fetch(canvas.toDataURL()).then(res => res.blob());
+                formData.append("file", blob, "captured_image.png");
+            } else {
+                alert("Please upload a file, take a photo, or enter text!");
+                return;
+            }
+
+            loadingIndicator.style.display = "block";
+            document.getElementById("resultBox").style.display = "none";
+
+            try {
+                let response = await fetch("/analyze", {
+                    method: "POST",
+                    body: formData
+                });
+                let data = await response.json();
+
+                if (data.error) {
+                    alert("Error: " + data.error);
+                } else {
+                    document.getElementById("extractedText").innerText = data.text || "No text extracted";
+                    document.getElementById("fraudPrediction").innerText = data.fraud_prediction || "No prediction";
+                    document.getElementById("resultBox").style.display = "block";
+                }
+            } catch (error) {
+                alert("An error occurred while analyzing.");
+            } finally {
+                loadingIndicator.style.display = "none";
+            }
+        });
+
+        function processCapturedImage() {
+            let imageDataUrl = canvas.toDataURL("image/png");
+            let img = new Image();
+            img.src = imageDataUrl;
+            img.style.maxWidth = "100%";
+            img.style.borderRadius = "10px";
+            img.style.margin = "10px 0";
+            document.querySelector('.input-group').appendChild(img);
+        }
+    </script>
+</body>
+</html>
