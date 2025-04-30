@@ -1,4 +1,5 @@
-fAInance: AI-Powered Financial Advisory Platform – Bridging the Financial Knowledge Gap for All Users
+# fAInance: AI-Powered Financial Advisory Platform – Bridging the Financial Knowledge Gap for All Users
+
 Problem Statement:
 Financial literacy among young adults is alarmingly low, leading to poor financial decisions, excessive debt, and missed investment opportunities. Many young individuals are new to finance and find it challenging to navigate the complexities of loans, credit cards, investments, and budgeting. Traditional financial advisory services are often expensive, biased, and difficult to access, leaving young people without proper guidance. Additionally, financial fraud is on the rise, making secure financial transactions a pressing concern. Our goal is to address these challenges by providing a personalized, transparent, and engaging financial advisory platform designed specifically for the youth, while also being customizable and inclusive for all types of users.
 Proposed Solution:
