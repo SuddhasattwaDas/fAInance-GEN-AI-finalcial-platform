@@ -1,5 +1,6 @@
 <div align="center">
 
+<img src="https://raw.githubusercontent.com/your-username/fAInance/main/frontend/public/logo.png" alt="fAInance logo" width="120" onerror="this.style.display='none'"/>
 
 # 💰 fAInance
 
@@ -95,6 +96,7 @@ A **LangGraph `StateGraph`** wires together 9 specialist agents behind a single 
 
 <div align="center">
 
+| Dashboard | Debt Escape Planner | Explainable Loan Predictor |
 ![WhatsApp Image 2025-02-09 at 11 48 59_d6135947](https://github.com/user-attachments/assets/6c3150c2-7592-41a6-9755-4c9d5c2e6bf3)
 ![image](https://github.com/user-attachments/assets/fb8ed43e-a4c2-4598-8b6e-bd0d50d602f1)
 ![image](https://github.com/user-attachments/assets/2b216b49-98f7-4cbc-a150-32c36a4227ad)
@@ -183,36 +185,68 @@ Guardrails baked into the math:
 
 **Design in one line:** *thin HTTP routes → pure-Python services → LangGraph agents, with a single LLM chokepoint that gracefully degrades.*
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                       FRONTEND (React + Vite)                        │
-│   Pages/AI/*  ──calls──▶  api/client.ts (axios + JWT interceptor)     │
-│   AuthContext (JWT)              LanguageContext (i18n)               │
-└──────────────────────────────┬──────────────────────────────────────┘
-                               │  /api/*  (Vite proxy → :5000)
-                               ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                            BACKEND (Flask)                            │
-│   app.py ── registers ──▶ routes/*.py   (one blueprint per feature)   │
-│   routes/*.py ── delegates logic to ──▶ services/*.py                 │
-│                    (pure Python, zero Flask imports, unit-testable)   │
-│                                                                       │
-│   Multi-agent endpoints routed through:                              │
-│      agents/orchestrator.py  (LangGraph StateGraph)                  │
-│         ├─ router_agent          intent classification               │
-│         ├─ advisor_agent         loan / card / investment            │
-│         ├─ explainability_agent  SHAP-style attributions             │
-│         ├─ portfolio_agent       snapshot + drift + commentary       │
-│         ├─ stock / news / fraud / education / chatbot agents         │
-│         └─ state.py              shared AgentState schema             │
-│                                                                       │
-│   All LLM calls funnel through services/llm_service.py               │
-│      ├─ PORTKEY_API_KEY set   → real call to Portkey gateway         │
-│      └─ PORTKEY_API_KEY unset → deterministic mock (never breaks)    │
-│                                                                       │
-│   Persistence: models/store.py — thread-safe in-memory store         │
-│   (profiles, holdings, loan history). Swap for a real DB in prod.    │
-└─────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    User(["👤 User"])
+
+    subgraph FE["🖥️ Frontend · React + Vite"]
+        direction TB
+        Pages["Pages/AI/*"]
+        Ctx["AuthContext · LanguageContext"]
+        Client["api/client.ts<br/>axios + JWT interceptor"]
+        Pages --> Client
+        Ctx -.-> Client
+    end
+
+    subgraph BE["⚙️ Backend · Flask"]
+        direction TB
+        App["app.py<br/>registers blueprints"]
+        Routes["routes/*.py<br/>one blueprint per feature"]
+        Services["services/*.py<br/>pure Python · zero Flask imports"]
+        App --> Routes --> Services
+    end
+
+    subgraph AG["🧠 LangGraph Agents"]
+        direction TB
+        Orch["orchestrator.py<br/>StateGraph"]
+        Router["router_agent<br/>intent classification"]
+        Spec["advisor · explainability · portfolio<br/>stock · news · fraud · education · chatbot"]
+        State["state.py<br/>shared AgentState"]
+        Orch --> Router --> Spec
+        Spec -.-> State
+    end
+
+    subgraph LL["🤖 LLM Layer · single chokepoint"]
+        direction TB
+        LLMSvc["services/llm_service.py"]
+        Portkey["Portkey gateway<br/>real LLM call"]
+        Mock["deterministic mock<br/>never breaks"]
+        LLMSvc -->|"PORTKEY_API_KEY set"| Portkey
+        LLMSvc -->|"key unset"| Mock
+    end
+
+    Store[("models/store.py<br/>thread-safe in-memory store")]
+
+    User --> Pages
+    Client -->|"/api/* · Vite proxy → :5000"| Routes
+    Services -->|"simple CRUD (auth, profile)"| Store
+    Services -->|"multi-step reasoning"| Orch
+    Spec --> LLMSvc
+    Services -.->|"direct LLM calls"| LLMSvc
+
+    classDef fe fill:#dbeafe,stroke:#3b82f6,stroke-width:1px,color:#1e3a8a;
+    classDef be fill:#e2e8f0,stroke:#64748b,stroke-width:1px,color:#0f172a;
+    classDef ag fill:#ede9fe,stroke:#8b5cf6,stroke-width:1px,color:#4c1d95;
+    classDef ll fill:#dcfce7,stroke:#22c55e,stroke-width:1px,color:#14532d;
+    classDef store fill:#fef3c7,stroke:#f59e0b,stroke-width:1px,color:#78350f;
+    classDef user fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d;
+
+    class Pages,Client,Ctx fe;
+    class App,Routes,Services be;
+    class Orch,Router,Spec,State ag;
+    class LLMSvc,Portkey,Mock ll;
+    class Store store;
+    class User user;
 ```
 
 <details>
