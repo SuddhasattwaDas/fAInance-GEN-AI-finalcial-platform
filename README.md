@@ -93,11 +93,7 @@ A **LangGraph `StateGraph`** wires together 9 specialist agents behind a single 
 
 ## 🖼️ Screenshots
 
-> 📸 *Drop your screenshots or a demo GIF here to make the README pop.*
-
 <div align="center">
-
-| Dashboard | Debt Escape Planner | Explainable Loan Predictor |
 
 ![WhatsApp Image 2025-02-09 at 11 48 59_d6135947](https://github.com/user-attachments/assets/6c3150c2-7592-41a6-9755-4c9d5c2e6bf3)
 ![image](https://github.com/user-attachments/assets/fb8ed43e-a4c2-4598-8b6e-bd0d50d602f1)
