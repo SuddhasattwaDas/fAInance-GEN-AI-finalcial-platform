@@ -1,6 +1,5 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/your-username/fAInance/main/frontend/public/logo.png" alt="fAInance logo" width="120" onerror="this.style.display='none'"/>
 
 # 💰 fAInance
 
@@ -99,8 +98,10 @@ A **LangGraph `StateGraph`** wires together 9 specialist agents behind a single 
 <div align="center">
 
 | Dashboard | Debt Escape Planner | Explainable Loan Predictor |
-|:---:|:---:|:---:|
-| ![Dashboard](docs/screenshot-dashboard.png) | ![Debt Planner](docs/screenshot-debt.png) | ![Loan Predictor](docs/screenshot-loan.png) |
+
+![WhatsApp Image 2025-02-09 at 11 48 59_d6135947](https://github.com/user-attachments/assets/6c3150c2-7592-41a6-9755-4c9d5c2e6bf3)
+![image](https://github.com/user-attachments/assets/fb8ed43e-a4c2-4598-8b6e-bd0d50d602f1)
+![image](https://github.com/user-attachments/assets/2b216b49-98f7-4cbc-a150-32c36a4227ad)
 
 </div>
 
